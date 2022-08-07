@@ -1,0 +1,73 @@
+# This entrypoint file to be used in development. Start by reading README.md
+from pytest import main
+
+from arithmetic_arranger import arithmetic_arranger
+# error rule 1-limit of 5 problems (error if more)
+# error rule 2-operator must be a + or -
+# error rule 3-numbers must only contain digits
+# error rule 4-numbers cannot be more than 4 digits
+
+# need to create a function that receives create a function that receives aritmeric problems and returns the problems arranged 
+# vertically and side-by-side. The function should optionally take a second argument. When the second argument is 
+# set to True, the answers should be displayed.
+
+#I want to ask for several (up to 5) addition or subtraction problems
+# I want to split them into several lists
+
+#firstin = input('Enter the first problem that you would like for me to solve')
+#print(firstin)
+def arithmetic_arranger(problems, mode = False) :
+    #rule1
+    if len(problems)>5: return('Error: too many problems.')
+
+#loops through the problems
+line1 = str()
+line2 = str()
+line3 = str()
+line4 = str()
+
+#turning each part of the problem into a variable
+for problem in problems:
+    prob_split = problem.split()
+    fir_num = prob_split[0]
+    operator = prob_split[1]
+    sec_num = prob_split[2]
+
+#checks to make sure that operator is only + or -
+    if operator == '+':
+        answer = int(fir_num)+int(sec_num)
+    elif operator == '-':
+        answer = int(fir_num)-int(sec_num)
+    else:   print('Error: Operator must be a + or a -.')
+
+#ensure input are numbers
+    if fir_num.isdecimal()==False or sec_num.isdecimal()==False: 
+        print('Numbers must only contain digits.')
+
+#check for number length
+num_max_len = max(len(fir_num), len(sec_num))
+if num_max_len > 4: print('Error: Numbers cannot be more than four digits.')
+
+#checking alignment - feel like i can make shorter
+line1 = line1 + fir_num.rjust(num_max_len+2)+'    '
+line2 = line2 + operator + sec_num.rjust(num_max_len+1)+'    '
+line3 = line3 + "-" * (num_max_len+2)+'    '
+line4 = line4 + str(answer).rjust(num_max_len+2)+'    '
+
+line1 = line1[0:-4]
+line2 = line2[0:-4]
+line3 = line3[0:-4]
+line4 = line4[0:-4]
+
+if mode == True:
+    arranged = line1+"\n"+line2+"\n"+line3+"\n"+line4
+elif mode == False:
+    arranged = line1+"\n"+line2+"\n"+line3
+
+print(arranged)
+
+print(arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"]))
+
+
+# Run unit tests automatically
+main()
